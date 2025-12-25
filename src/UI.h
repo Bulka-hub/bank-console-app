@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <vector>
 #include "Bank.h"
 using namespace std;
 
@@ -171,18 +172,3 @@ public:
         if (bank.transferMoney(fromId, toId, amount)) {
             cout << "Перевод успешно выполнен!\n";
             cout << "Новый баланс отправителя: " << fromAccount->getBalance() << " руб.\n";
-        } else {
-            cout << "Ошибка перевода! Проверьте баланс и повторите попытку.\n";
-        }
-    }
-
-    void showAllAccounts() {
-        cout << "\n=== ВСЕ АККАУНТЫ В СИСТЕМЕ ===\n";
-        vector<Account*> accounts = bank.getAllAccounts();
-        for (Account* acc : accounts) {
-            cout << "ID: " << acc->getId()
-                 << ", Имя: " << acc->getName()
-                 << ", Баланс: " << acc->getBalance() << " руб.\n";
-        }
-    }
-};
