@@ -1,5 +1,4 @@
 #include "UI.h"
-#pragma once
 #include <string>
 #include "Bank.h"
 
@@ -24,6 +23,7 @@ public:
     void transferMoney();
     void showAllAccounts();
 };
+
 
 
 
