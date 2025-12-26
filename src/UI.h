@@ -92,11 +92,15 @@ public:
 
     void createAccount() {
         cout << "\n=== СОЗДАНИЕ АККАУНТА ===\n";
+        int id = inputInt("Введите ID для нового аккаунта: ");
         string name = inputString("Введите имя: ");
         double initialBalance = inputDouble("Введите начальный баланс: ");
-        Account newAccount = bank.createAccount(name, initialBalance);
+        
+        // Bank::createAccount() возвращает void, поэтому не можем присвоить результат
+        bank.createAccount(id, name, initialBalance);
+        
         cout << "Аккаунт успешно создан!\n";
-        cout << "ID вашего аккаунта: " << newAccount.getId() << "\n";
+        cout << "ID вашего аккаунта: " << id << "\n";
         cout << "Запомните этот ID для доступа к аккаунту!\n";
     }
 
@@ -172,3 +176,25 @@ public:
         if (bank.transferMoney(fromId, toId, amount)) {
             cout << "Перевод успешно выполнен!\n";
             cout << "Новый баланс отправителя: " << fromAccount->getBalance() << " руб.\n";
+            cout << "Новый баланс получателя: " << toAccount->getBalance() << " руб.\n";
+        } else {
+            cout << "Ошибка перевода! Недостаточно средств.\n";
+        }
+    }
+
+    void showAllAccounts() {
+        cout << "\n=== ВСЕ АККАУНТЫ ===\n";
+        const vector<Account>& accounts = bank.getAccounts(); // Используем getAccounts()
+        
+        if (accounts.empty()) {
+            cout << "Нет созданных аккаунтов.\n";
+            return;
+        }
+        
+        for (const auto& account : accounts) {
+            cout << "ID: " << account.getId() 
+                 << ", Владелец: " << account.getName()
+                 << ", Баланс: " << account.getBalance() << " руб.\n";
+        }
+    }
+}; // Закрывающая фигурная скобка класса
