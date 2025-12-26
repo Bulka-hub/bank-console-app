@@ -1,54 +1,54 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 #include "Bank.h"
+#include "UI.h"
+
 using namespace std;
 
+void saveAccountsToFile(const Bank& bank) {
+    ofstream file("accounts.txt");
+    if (!file.is_open()) {
+        cout << "Предупреждение: не удалось сохранить данные.\n";
+        return;
+    }
+
+    const auto& accounts = bank.getAccounts();
+    for (const auto& acc : accounts) {
+        file << acc.getId() << " " << acc.getName() << " " << acc.getBalance() << "\n";
+    }
+    file.close();
+}
+
+void loadAccountsFromFile(Bank& bank) {
+    ifstream file("accounts.txt");
+    if (!file.is_open()) {
+        cout << "Файл accounts.txt не найден. Создаём новый.\n";
+        return;
+    }
+
+    int id;
+    string name;
+    double balance;
+
+    while (file >> id >> name >> balance) {
+        bank.createAccount(id, name, balance);
+    }
+    file.close();
+}
+
 int main() {
-	setlocale(LC_CTYPE, "Russian");
-    int choice;
-    do {
-        std::cout << "\n=== Banking Application ===\n";
-        std::cout << "1. Create Account\n";
-        std::cout << "2. View Balance\n";
-        std::cout << "3. Deposit Money\n";
-        std::cout << "4. Withdraw Money\n";
-        std::cout << "5. Transfer Money\n";
-        std::cout << "6. Exit\n";
-        std::cout << "Choose an option: ";
-        std::cin >> choice;
+    setlocale(LC_ALL, "Russian");
 
-        switch (choice) {
-        case 1: {
-            std::cout << "Creating a new account...\n";
-            break;
-        }
-        case 2: {
-            std::cout << "Viewing account balance...\n";
-            break;
-        }
-        case 3: {
-            std::cout << "Depositing money...\n";
-            break;
-        }
-        case 4: {
-            std::cout << "Withdrawing money...\n";
-            break;
-        }
-        case 5: {
-            std::cout << "Transferring money...\n";
-            break;
-        }
-        case 6: {
-            std::cout << "Thank you for using our banking app!\n";
-            break;
-        }
-        default:
-            std::cout << "Invalid option. Please try again.\n";
-        }
+    Bank bank;
+    loadAccountsFromFile(bank);
 
-    } while (choice != 6);
+    ConsoleUI ui(bank);
+    ui.showMainMenu();
 
-    std::cout << "Press Enter to exit...";
-    std::cin.ignore();
-    std::cin.get();
-	return 0;
+    saveAccountsToFile(bank);
+    cout << "Данные сохранены. До свидания!\n";
+
+    return 0;
 }
