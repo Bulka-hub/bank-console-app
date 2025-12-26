@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <string>
 #include "Bank.h"
@@ -21,3 +20,4 @@ public:
     void transferMoney();
     void showAllAccounts();
 };
+
