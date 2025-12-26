@@ -6,6 +6,14 @@
 
 #include "FileManager.h"
 
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <locale>
+
+#include "FileManager.h"
+
 using namespace std;
 
 void saveAccounts(const vector<Account>& accounts) {
@@ -39,4 +47,28 @@ vector<Account> loadAccounts() {
 
     file.close();
     return accounts;
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    vector<Account> accounts = loadAccounts();
+
+    if (accounts.empty()) {
+        accounts.push_back({ 1, "Ivan", 1000 });
+        accounts.push_back({ 2, "Anna", 500 });
+        cout << "Созданы тестовые аккаунты\n";
+    }
+
+    cout << "\nСписок аккаунтов:\n";
+    for (const Account& acc : accounts) {
+        cout << "ID: " << acc.id
+            << " | Имя: " << acc.name
+            << " | Баланс: " << acc.balance << endl;
+    }
+
+    saveAccounts(accounts);
+
+    cout << "\nДанные сохранены. Выход из программы.\n";
+    return 0;
 }
