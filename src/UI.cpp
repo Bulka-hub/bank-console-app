@@ -1,12 +1,11 @@
-#include "UI.h"
+#pragma once
+#include <iostream>
 #include <string>
 #include "Bank.h"
 
-class ConsoleUI
-{
+class ConsoleUI {
 private:
     Bank& bank;
-
     void clearInputBuffer();
     int inputInt(const std::string& prompt);
     double inputDouble(const std::string& prompt);
@@ -14,7 +13,6 @@ private:
 
 public:
     ConsoleUI(Bank& b);
-
     void showMainMenu();
     void createAccount();
     void showBalance();
@@ -23,9 +21,3 @@ public:
     void transferMoney();
     void showAllAccounts();
 };
-
-
-
-
-
-
