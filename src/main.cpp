@@ -4,6 +4,7 @@ using namespace std;
 
 int main() {
 	setlocale(LC_CTYPE, "Russian");
+    int choice;
     do {
         std::cout << "\n=== Banking Application ===\n";
         std::cout << "1. Create Account\n";
