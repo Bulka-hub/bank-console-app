@@ -4,8 +4,8 @@ using namespace std;
 
 int main() {
 	setlocale(LC_CTYPE, "Russian");
-	cout << "Bank console app - çàïóùåí";
-	std::cout << "\nНажмите Enter для выхода...";
+	cout << "";
+	std::cout << "\nPress Enter to exit...";
 	std::cin.get();
 	return 0;
 }
