@@ -1,19 +1,28 @@
-#pragma once
+#ifndef ACCOUNT_H
+#define ACCOUNT_H
+
 #include <string>
+#include <iostream>
 
 class Account {
 private:
-    int    id;
+    int id;
     std::string name;
     double balance;
 
 public:
-    Account(int id, const std::string& name, double initial = 0.0);
+    // Конструктор
+    Account(int id, std::string name, double balance);
 
-    int         getId()    const;
-    std::string getName()  const;
-    double      getBalance() const;
+    // Геттеры
+    int getId() const;
+    std::string getName() const;
+    double getBalance() const;
 
+    // Операции
     void deposit(double amount);
-    bool withdraw(double amount);  
+    bool withdraw(double amount);
+    void display() const;
 };
+
+#endif
