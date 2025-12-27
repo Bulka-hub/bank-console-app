@@ -1,12 +1,17 @@
-#pragma once
-#include <vector>
+#ifndef FILEMANAGER_H
+#define FILEMANAGER_H
+
+#include "Bank.h"
 #include <string>
 
-struct Account {
-    int id;
-    std::string name;
-    double balance;
+class FileManager {
+private:
+    std::string filename;
+
+public:
+    FileManager(std::string filename);
+    void saveData(const Bank& bank);
+    void loadData(Bank& bank);
 };
 
-void saveAccounts(const std::vector<Account>& accounts);
-std::vector<Account> loadAccounts();
+#endif
