@@ -1,55 +1,49 @@
 #include "Bank.h"
-#include <iostream> // Для вывода ошибок (опционально)
+#include <iostream>
 
-// Реализация создания аккаунта
-void Bank::createAccount(int id, std::string name, double initialBalance) {
-    // emplace_back создает объект сразу в векторе — это эффективно
-    accounts.emplace_back(id, name, initialBalance);
+void Bank::createAccount(std::string name, double initialDeposit) {
+    // Генерация простого ID: последний ID + 1, или 1 если пусто
+    int newId = accounts.empty() ? 1 : accounts.back().getId() + 1;
+    Account newAcc(newId, name, initialDeposit);
+    accounts.push_back(newAcc);
+    std::cout << "Аккаунт создан успешно! Ваш ID: " << newId << std::endl;
 }
 
-// Реализация поиска
 Account* Bank::findAccountById(int id) {
-    // Пробегаем по вектору. Важно использовать auto& (ссылку),
-    // чтобы работать с оригиналом, а не копией.
     for (auto& acc : accounts) {
         if (acc.getId() == id) {
-            return &acc; // Возвращаем адрес найденного аккаунта
+            return &acc;
         }
     }
-    return nullptr; // Если цикл прошел и ничего не нашлось
+    return nullptr;
 }
 
-// Реализация перевода
-bool Bank::transferMoney(int fromId, int toId, double amount) {
-    // 1. Ищем обоих участников
+void Bank::transferMoney(int fromId, int toId, double amount) {
     Account* sender = findAccountById(fromId);
     Account* receiver = findAccountById(toId);
 
-    // 2. Проверяем, существуют ли они
-    if (sender == nullptr || receiver == nullptr) {
-        std::cout << "Error: One of the accounts was not found." << std::endl;
-        return false;
+    if (!sender || !receiver) {
+        std::cout << "Ошибка: Один из аккаунтов не найден." << std::endl;
+        return;
     }
 
-    // 3. Нельзя переводить самому себе
-    if (fromId == toId) {
-        std::cout << "Error: Cannot transfer to the same account." << std::endl;
-        return false;
-    }
-
-    // 4. Пытаемся снять деньги у отправителя
-    // Метод withdraw (из Account) сам проверит, хватает ли баланса
     if (sender->withdraw(amount)) {
-        // Если снялось успешно, зачисляем получателю
         receiver->deposit(amount);
-        return true;
+        std::cout << "Перевод успешно выполнен!" << std::endl;
     }
-
-    // Если withdraw вернул false (недостаточно средств)
-    return false;
 }
 
-// Реализация геттера для списка (для Role #4 - Файлы)
+void Bank::showAllAccounts() const {
+    std::cout << "--- Список всех аккаунтов ---" << std::endl;
+    for (const auto& acc : accounts) {
+        acc.display();
+    }
+}
+
 const std::vector<Account>& Bank::getAccounts() const {
     return accounts;
+}
+
+void Bank::loadAccount(int id, std::string name, double balance) {
+    accounts.emplace_back(id, name, balance);
 }
