@@ -1,74 +1,37 @@
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include <string>
-#include <locale>
-
 #include "FileManager.h"
-
-#include <iostream>
-#include <vector>
 #include <fstream>
-#include <string>
-#include <locale>
+#include <iostream>
 
-#include "FileManager.h"
+FileManager::FileManager(std::string filename) : filename(filename) {}
 
-using namespace std;
-
-void saveAccounts(const vector<Account>& accounts) {
-    ofstream file("accounts.txt");
-
-    if (!file.is_open()) {
-        cout << "Ошибка: не удалось открыть файл для записи\n";
-        return;
+void FileManager::saveData(const Bank& bank) {
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        for (const auto& acc : bank.getAccounts()) {
+            file << acc.getId() << " " << acc.getName() << " " << acc.getBalance() << std::endl;
+        }
+        file.close();
+        std::cout << "Данные успешно сохранены в " << filename << std::endl;
     }
-
-    for (const Account& acc : accounts) {
-        file << acc.id << " " << acc.name << " " << acc.balance << endl;
+    else {
+        std::cout << "Ошибка открытия файла для записи!" << std::endl;
     }
-
-    file.close();
 }
 
-vector<Account> loadAccounts() {
-    vector<Account> accounts;
-    ifstream file("accounts.txt");
+void FileManager::loadData(Bank& bank) {
+    std::ifstream file(filename);
+    if (file.is_open()) {
+        int id;
+        std::string name;
+        double balance;
 
-    if (!file.is_open()) {
-        cout << "Файл не найден. Начинаем с пустого списка.\n";
-        return accounts;
+        while (file >> id >> name >> balance) {
+            bank.loadAccount(id, name, balance);
+        }
+        file.close();
+        std::cout << "Данные загружены из " << filename << std::endl;
     }
-
-    Account acc;
-    while (file >> acc.id >> acc.name >> acc.balance) {
-        accounts.push_back(acc);
+    else {
+        std::cout << "Файл сохранения не найден. Будет создан новый при выходе." << std::endl;
     }
-
-    file.close();
-    return accounts;
-}
-
-int main() {
-    setlocale(LC_ALL, "Russian");
-
-    vector<Account> accounts = loadAccounts();
-
-    if (accounts.empty()) {
-        accounts.push_back({ 1, "Ivan", 1000 });
-        accounts.push_back({ 2, "Anna", 500 });
-        cout << "Созданы тестовые аккаунты\n";
-    }
-
-    cout << "\nСписок аккаунтов:\n";
-    for (const Account& acc : accounts) {
-        cout << "ID: " << acc.id
-            << " | Имя: " << acc.name
-            << " | Баланс: " << acc.balance << endl;
-    }
-
-    saveAccounts(accounts);
-
-    cout << "\nДанные сохранены. Выход из программы.\n";
-    return 0;
 }
