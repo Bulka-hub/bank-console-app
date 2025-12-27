@@ -33,6 +33,7 @@ int main() {
         }
 
         switch (choice) {
+            // Создание аккаунта
         case 1: {
             std::string name;
             double amount;
@@ -43,9 +44,11 @@ int main() {
             myBank.createAccount(name, amount);
             break;
         }
+            // Показать все аккаунты
         case 2:
             myBank.showAllAccounts();
             break;
+            // Пополнение счета
         case 3: {
             int id;
             double amount;
@@ -62,6 +65,7 @@ int main() {
             }
             break;
         }
+            // Снятие денег
         case 4: {
             int id;
             double amount;
@@ -78,6 +82,7 @@ int main() {
             }
             break;
         }
+            // Перевод денег
         case 5: {
             int fromId, toId;
             double amount;
@@ -90,6 +95,7 @@ int main() {
             myBank.transferMoney(fromId, toId, amount);
             break;
         }
+            // Сохранение и выход
         case 6:
             fileManager.saveData(myBank);
             std::cout << "До свидания!" << std::endl;
